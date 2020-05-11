@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+	
+	<context:annotation-config></context:annotation-config>
+	<context:component-scan base-package="model"></context:component-scan>
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	
+	
+    
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" /> 
+		<property name="port" value="587" /> 
+		<property name="username" value="clintonwu2013@gmail.com" /> 
+		<property name="password" value="yavgohihafmiigbv" /> 
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.starttls.enable">true</prop>
+			</props>
+		</property>
+	</bean>
+ 
+<!-- 	<bean id="mailSend" class="com.MailSend"> -->
+<!-- 		<property name="mailSender" ref="mailSender" />  -->
+<!-- 	</bean> -->
+	
+	
+<!-- 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> -->
+<!-- 	<property name="jndiName" value="java:comp/env/jdbc/final"></property> -->
+<!-- 	</bean> -->
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 單位bytes -->
+		<property name="maxUploadSize" value="20971520" /> <!-- 20MB --><!-- 全部檔案最大上上傳大小, -1代表不限制 -->
+		<property name="maxUploadSizePerFile" value="5242880" /> <!-- 5MB --><!-- 每個檔案最大上傳大小, -1代表不限制 -->
+		<property name="maxInMemorySize" value="1048576" /> <!-- 1MB --><!-- 檔案上傳最大的暫存記憶體大小,預設為10240 bytes(1KB) -->
+		<property name="defaultEncoding" value="UTF-8" /> <!-- 1MB -->
+	</bean>
+	
+	<bean id="sessionFactory" destroy-method="destroy"
+		class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		
+<!-- 		<property name="dataSource" ref="dataSource"></property> -->
+		
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+	</bean>
+	
+	
+	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+         <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+ 	</bean>
+
+      
+<!-- 	<bean id="transactionManager" -->
+<!-- 		class="org.springframework.orm.hibernate5.HibernateTransactionManager"> -->
+<!-- 		<property name="sessionFactory" ref="sessionFactory"></property> -->
+<!-- 	</bean> -->
+<!-- 	<tx:annotation-driven transaction-manager="transactionManager"/> -->
+</beans>
